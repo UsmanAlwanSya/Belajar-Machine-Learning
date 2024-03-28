@@ -1,32 +1,22 @@
-import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Fungsi untuk merespons pesan pengguna
-def respond_to_message(user_input):
-    # Contoh aturan sederhana
-    if user_input.lower() == "halo":
-        return "Halo! Ada yang bisa saya bantu?"
-    if user_input.lower() == "siapa kamu":
-        return "Hai, Saya Simple "
-    else:
-        return "Maaf, saya tidak mengerti pertanyaan Anda."
+data = pd.read_csv('titanic.csv')
 
-# Fungsi untuk menampilkan pesan
-def display_message(sender, message):
-    st.write(f"**{sender}:** {message}")
+#Menampilkan Data 20 ke atas
+data.head(20)
 
-# Judul halaman
-st.title("Minator")
+#Menampilakn Data 20 Kebawah
+data.tail(20)
 
-# Input text untuk pengguna memasukkan pesan
-user_message = st.text_input("Masukkan pesan Anda di sini:")
+#Melakukan analisis Dengan Groub by kolom 'Sex' dan Kolom 'Survived'
+survived_gender = data.groupby("Sex")["Survived"].sum()
 
-# Tombol untuk mengirim pesan
-if st.button("Kirim"):
-    # Menampilkan pesan pengguna
-    display_message("Anda", user_message)
-    
-    # Menanggapi pesan pengguna
-    response = respond_to_message(user_message)
-    
-    # Menampilkan pesan respons
-    display_message("Chatbot", response)
+#Memvisualisasikan Perbandingan Jumlah Survived berdasarkan Gender
+plt.figure(figsize=(8, 6))
+survived_gender.plot(kind='bar', color=['blue', 'pink'])
+plt.title('Perbandingan Jumlah Penumpang yang Selamat berdasarkan Gender')
+plt.xlabel('Gender')
+plt.ylabel('Jumlah Penumpang Selamat')
+plt.xticks(rotation=0)  # Untuk memperjelas label sumbu x
+plt.show()
